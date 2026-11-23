@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <img src="{% static "chichi.jpg" %}" alt="치이카와">
+
+    <hr>
+
+    <h1>안녕하세요 {{user.username }} 님의</h1>
+    <h1>♥ 희현 world♥ 입니다</h1>
+    
+    <hr>
+    <a href="{% url "accounts:signup" %}">[회원가입]</a>
+
+
+
+    {% comment %} get요청이고, 보낼 데이터 없다 : a 테그 {% endcomment %}
+    <a href="{% url "accounts:login" %}">[로그인]</a>
+
+    {% comment %} POST요청이고, 보낼 데이터가 없음 ! --> 이럴 땐 form태그 {% endcomment %}
+    <form action="{% url "accounts:logout" %}" method = "POST">
+        {% csrf_token %} {% comment %} form 태크는 무조건 csrf토큰 있어야 함 {% endcomment %}
+        <input type="submit" value = "[로그아웃]">
+    </form>
+    <hr>
+        <a href="{% url "articles:create" %}">[글쓰기]</a>
+    <hr>
+
+    {% comment %} context의 ariticles인 key값 {% endcomment %}
+    {% for article in articles %}
+        <p>글 번호 : {{article.pk}}</p>
+
+        {% comment %} a태그 vs form태그
+        단순한 get요청이다 : a태그
+        데이터를 보내면서 get요청 : form 태그
+        데이터를 보내면서 post요청 : form 태그 {% endcomment %}
+        <a href="{% url "articles:detail" article.pk%}">    
+            <p>글 제목 : {{article.title}}</p>
+        </a>    
+
+        <p>글 내용 : {{article.content}}</p>
+        <hr>
+    {% endfor %}
+
+
+{% endblock content %}
